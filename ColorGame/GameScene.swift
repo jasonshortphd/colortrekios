@@ -28,11 +28,13 @@ class GameScene: SKScene {
         
     }
     
-    func createPlayer() {
+    func createPlayer()
+    {
         player = SKSpriteNode(imageNamed: "player")
         guard let playerPosition = tracksArray?.first?.position.x else {return}
         player?.position = CGPoint(x: playerPosition, y: self.size.height / 2)
         
+        // Add the player to the child tree so it gets rendered
         self.addChild(player!)
         
         let pulse = SKEmitterNode(fileNamed: "pulse")!
@@ -41,14 +43,17 @@ class GameScene: SKScene {
         
     }
     
-    override func didMove(to view: SKView) {
+    override func didMove(to view: SKView)
+    {
         setupTracks()
         createPlayer()
-       
     }
     
-    func moveVertically (up:Bool) {
-        if up {
+    // Start the player moving up or down along its current position
+    func moveVertically (up:Bool)
+    {
+        if up
+        {
             let moveAction = SKAction.moveBy(x: 0, y: 3, duration: 0.01)
             let repeatAction = SKAction.repeatForever(moveAction)
             player?.run(repeatAction)
@@ -59,15 +64,18 @@ class GameScene: SKScene {
         }
     }
     
-    func moveToNextTrack() {
+    func moveToNextTrack()
+    {
         player?.removeAllActions()
         movingToTrack = true
         
         guard let nextTrack = tracksArray?[currentTrack + 1].position else {return}
         
-        if let player = self.player {
+        if let player = self.player
+        {
             let moveAction = SKAction.move(to: CGPoint(x: nextTrack.x, y:player.position.y), duration: 0.2)
-            player.run(moveAction, completion: {
+            player.run(moveAction, completion:
+                {
                 self.movingToTrack = false
             })
             currentTrack += 1
@@ -77,12 +85,15 @@ class GameScene: SKScene {
         
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let touch = touches.first {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?)
+    {
+        if let touch = touches.first
+        {
             let location = touch.previousLocation(in: self)
             let node = self.nodes(at: location).first
             
-            if node?.name == "right" {
+            if node?.name == "right"
+            {
                moveToNextTrack()
             } else if node?.name == "up" {
                 moveVertically(up: true)
@@ -92,14 +103,18 @@ class GameScene: SKScene {
         }
     }
     
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if !movingToTrack {
+    // Stop all actions on the player when touches are let up
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?)
+    {
+        if !movingToTrack
+        {
             player?.removeAllActions()
         }
         
     }
     
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?)
+    {
         player?.removeAllActions()
     }
     
