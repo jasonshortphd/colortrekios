@@ -16,16 +16,18 @@ class GameScene: SKScene {
     
     var currentTrack = 0
     var movingToTrack = false
+    let maxTrack = 8
     
     let moveSound = SKAction.playSoundFileNamed("move.wav", waitForCompletion: false)
     
-    func setupTracks(){
-        for i in 0 ... 8 {
+    func setupTracks()
+    {
+        for i in 0 ... maxTrack
+        {
             if let track = self.childNode(withName: "\(i)") as? SKSpriteNode {
                 tracksArray?.append(track)
             }
         }
-        
     }
     
     func createPlayer()
@@ -69,8 +71,15 @@ class GameScene: SKScene {
         player?.removeAllActions()
         movingToTrack = true
         
-        guard let nextTrack = tracksArray?[currentTrack + 1].position else {return}
+        // Don't allow player to go off the screen
+        if( currentTrack == maxTrack)
+        {
+            // TODO: Should play a different sound telling player they can't go any further
+            return
+        }
         
+        guard let nextTrack = tracksArray?[currentTrack + 1].position else { return }
+    
         if let player = self.player
         {
             let moveAction = SKAction.move(to: CGPoint(x: nextTrack.x, y:player.position.y), duration: 0.2)
@@ -92,12 +101,14 @@ class GameScene: SKScene {
             let location = touch.previousLocation(in: self)
             let node = self.nodes(at: location).first
             
-            if node?.name == "right"
+            if node?.name == "right" || node?.name == "rightImg"
             {
                moveToNextTrack()
-            } else if node?.name == "up" {
+            } else if node?.name == "up" || node?.name == "upImg"
+            {
                 moveVertically(up: true)
-            } else if node?.name == "down" {
+            } else if node?.name == "down" || node?.name == "downImg"
+            {
                 moveVertically(up: false)
             }
         }
