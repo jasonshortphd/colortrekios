@@ -82,13 +82,16 @@ class GameScene: SKScene {
     
         if let player = self.player
         {
+            // Move To: The next track location, let spritekit do the actual move
             let moveAction = SKAction.move(to: CGPoint(x: nextTrack.x, y:player.position.y), duration: 0.2)
             player.run(moveAction, completion:
-                {
+            {
+                // Upon completion - set the moving to false (keeps it clean)
                 self.movingToTrack = false
             })
             currentTrack += 1
             
+            // Play the sound at the scene level
             self.run(moveSound)
         }
         
@@ -117,6 +120,7 @@ class GameScene: SKScene {
     // Stop all actions on the player when touches are let up
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?)
     {
+        // Don't do this if the player is moving between tracks
         if !movingToTrack
         {
             player?.removeAllActions()
