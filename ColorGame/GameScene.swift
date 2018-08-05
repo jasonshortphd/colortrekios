@@ -9,7 +9,8 @@
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene {
+class GameScene: SKScene
+{
     
     var tracksArray:[SKSpriteNode]? = [SKSpriteNode]()
     var player:SKSpriteNode?
@@ -39,6 +40,7 @@ class GameScene: SKScene {
         // Add the player to the child tree so it gets rendered
         self.addChild(player!)
         
+        // We can also add emitters from particles the same way, but attach to the player as a child
         let pulse = SKEmitterNode(fileNamed: "pulse")!
         player?.addChild(pulse)
         pulse.position = CGPoint(x: 0, y: 0)
