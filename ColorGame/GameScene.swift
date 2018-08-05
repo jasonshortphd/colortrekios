@@ -1,7 +1,7 @@
 import SpriteKit
 import GameplayKit
 
-enum Enemies
+enum Enemies:Int
 {
     case small
     case medium
@@ -19,6 +19,15 @@ class GameScene: SKScene
     let maxTrack = 8
     
     let moveSound = SKAction.playSoundFileNamed("move.wav", waitForCompletion: false)
+    
+    // Choice of velocity per track chosen randomly at generation time
+    let trackVelocities = [180, 200, 250]
+    
+    // Per track, are the enemies moving up or down?
+    var directionArray = [Bool]()
+    
+    // Assigned velocity per track
+    var velocityArray = [Int]()
     
     func setupTracks()
     {
@@ -66,16 +75,53 @@ class GameScene: SKScene
         // If we can't get a track yet return nil
         guard let enemyPosition = tracksArray?[track].position else { return nil }
      
+        let up = directionArray[track]
         enemySprite.position.x = enemyPosition.x
-        enemySprite.position.y = 50
+        enemySprite.position.y = up ? -130 : self.size.height + 130
+        
+        // Add a physics body, set velocity +- depending upon the track direction
+        enemySprite.physicsBody = SKPhysicsBody(edgeLoopFrom: enemySprite.path!)
+        enemySprite.physicsBody?.velocity = up ? CGVector(dx: 0, dy: velocityArray[track]) : CGVector(dx: 0, dy: -velocityArray[track])
         
         return enemySprite
+    }
+    
+    func spawnEnemies()
+    {
+        for i in 1 ... 7
+        {
+            let randomEnemyType = Enemies(rawValue: GKRandomSource.sharedRandom().nextInt(upperBound: 3))!
+            if let newEnemy = CreateEnemy(type: randomEnemyType, forTrack: i)
+            {
+                // Attach them to the scene
+                self.addChild(newEnemy)
+            }
+        }
     }
     
     override func didMove(to view: SKView)
     {
         setupTracks()
         createPlayer()
+        
+        // Setup of the tracks
+        if let numberOfTracks = tracksArray?.count
+        {
+            for _ in 0 ... numberOfTracks
+            {
+                let randomNumberForVelocity = GKRandomSource.sharedRandom().nextInt(upperBound: 3)
+                velocityArray.append(trackVelocities[randomNumberForVelocity])
+                directionArray.append( GKRandomSource.sharedRandom().nextBool())
+            }
+        }
+        
+        self.run(SKAction.repeatForever(SKAction.sequence(
+            [
+                SKAction.run {
+                    self.spawnEnemies()
+                },
+                SKAction.wait(forDuration: 2)
+            ])))
     }
     
     // Start the player moving up or down along its current position
