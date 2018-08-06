@@ -76,7 +76,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         
         target?.physicsBody = SKPhysicsBody(circleOfRadius: target!.size.width / 2)
         target?.physicsBody?.categoryBitMask = targetCategory
-        
+        // We don't want the target to "collide" in a physics sense - we just want to get the collision notification
+        target?.physicsBody?.collisionBitMask = 0
     }
     
     func CreateEnemy( type:Enemies, forTrack track:Int) -> SKShapeNode?
@@ -136,13 +137,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate
     
     override func didMove(to view: SKView)
     {
-        // Assign ourself to the contact delegate for the physicsWorld
-        self.physicsWorld.contactDelegate = self
-        
         setupTracks()
         createPlayer()
+        createTarget()
         
-        
+        // Assign ourself to the contact delegate for the physicsWorld
+        self.physicsWorld.contactDelegate = self
+
         // Setup of the tracks
         if let numberOfTracks = tracksArray?.count
         {
@@ -161,13 +162,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate
                 },
                 SKAction.wait(forDuration: 2)
             ])))
-    }
-    
-    func didBegin( contact: SKPhysicsContact)
-    {
-        let collision:UInt32 = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
-        
-        //if collision == cat1 | cat2;
     }
     
     // Start the player moving up or down along its current position
@@ -252,9 +246,38 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         player?.removeAllActions()
     }
     
+    func didBegin( _ contact: SKPhysicsContact)
+    {
+        var playerBody:SKPhysicsBody
+        var otherBody:SKPhysicsBody
+        
+        // The smallest one is the player (0x01)
+        if( contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask)
+        {
+            playerBody = contact.bodyA
+            otherBody = contact.bodyB
+        }
+        else
+        {
+            playerBody = contact.bodyB
+            otherBody = contact.bodyA
+
+        }
+        
+        if playerBody.categoryBitMask == playerCategory && otherBody.categoryBitMask == enemyCategory
+        {
+            print("HIT ENEMY")
+        }
+        else if playerBody.categoryBitMask == playerCategory && otherBody.categoryBitMask == targetCategory
+        {
+            print("target hit")
+        }
+    }
+
     
     
-    override func update(_ currentTime: TimeInterval) {
+    override func update(_ currentTime: TimeInterval)
+    {
         // Called before each frame is rendered
     }
 }
