@@ -14,6 +14,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate
     var player:SKSpriteNode?
     var target:SKSpriteNode?
     
+    // MARK: HUD / UX
+    var timeLabel:SKLabelNode?
+    var scoreLabel:SKLabelNode?
+    var currentScore:Int = 0
+    {
+        // Compute the score again when it is set, so we can update the UI
+        didSet
+        {
+            self.scoreLabel?.text = "SCORE: \(self.currentScore)"
+        }
+    }
+    var remainingTime:TimeInterval = 60
+    {
+        didSet
+        {
+            
+        }
+    }
+    
     var currentTrack = 0
     var movingToTrack = false
     let maxTrack = 8
@@ -139,6 +158,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate
     
     func nextLevel(playerPhyicsBody:SKPhysicsBody)
     {
+        self.run(SKAction.playSoundFileNamed("levelUp.wav", waitForCompletion: false))
         let emitter = SKEmitterNode(fileNamed: "fireworks.sks")
 
         playerPhyicsBody.node?.addChild(emitter!)
@@ -314,6 +334,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         
         if playerBody.categoryBitMask == playerCategory && otherBody.categoryBitMask == enemyCategory
         {
+            self.run(SKAction.playSoundFileNamed("fail.wav", waitForCompletion: true))
             movePlayerToStart()
         }
         else if playerBody.categoryBitMask == playerCategory && otherBody.categoryBitMask == targetCategory
