@@ -8,11 +8,11 @@ enum Enemies:Int
     case large
 }
 
-class GameScene: SKScene
+class GameScene: SKScene, SKPhysicsContactDelegate
 {
-    
     var tracksArray:[SKSpriteNode]? = [SKSpriteNode]()
     var player:SKSpriteNode?
+    var target:SKSpriteNode?
     
     var currentTrack = 0
     var movingToTrack = false
@@ -28,6 +28,12 @@ class GameScene: SKScene
     
     // Assigned velocity per track
     var velocityArray = [Int]()
+    
+    // Physics
+    let playerCategory:UInt32 = 0x01 << 0
+    let enemyCategory:UInt32 = 0x01 << 1
+    let targetCategory:UInt32 = 0x01 << 2
+    
     
     func setupTracks()
     {
@@ -52,6 +58,24 @@ class GameScene: SKScene
         let pulse = SKEmitterNode(fileNamed: "pulse")!
         player?.addChild(pulse)
         pulse.position = CGPoint(x: 0, y: 0)
+        
+        player?.physicsBody = SKPhysicsBody(circleOfRadius: player!.size.width / 2)
+        player?.physicsBody?.linearDamping = 0
+        player?.physicsBody?.categoryBitMask = playerCategory
+        player?.physicsBody?.collisionBitMask = 0
+        // Who do we want to be notified when we hit them?
+        player?.physicsBody?.contactTestBitMask = enemyCategory | targetCategory
+        
+        
+    }
+    
+    func createTarget()
+    {
+        // Find the target in the scene
+        target = self.childNode(withName: "target") as? SKSpriteNode
+        
+        target?.physicsBody = SKPhysicsBody(circleOfRadius: target!.size.width / 2)
+        target?.physicsBody?.categoryBitMask = targetCategory
         
     }
     
@@ -83,6 +107,7 @@ class GameScene: SKScene
         // Add a physics body, set velocity +- depending upon the track direction
         enemySprite.physicsBody = SKPhysicsBody(edgeLoopFrom: enemySprite.path!)
         enemySprite.physicsBody?.velocity = up ? CGVector(dx: 0, dy: velocityArray[track]) : CGVector(dx: 0, dy: -velocityArray[track])
+        enemySprite.physicsBody?.categoryBitMask = enemyCategory
         
         return enemySprite
     }
@@ -111,8 +136,12 @@ class GameScene: SKScene
     
     override func didMove(to view: SKView)
     {
+        // Assign ourself to the contact delegate for the physicsWorld
+        self.physicsWorld.contactDelegate = self
+        
         setupTracks()
         createPlayer()
+        
         
         // Setup of the tracks
         if let numberOfTracks = tracksArray?.count
@@ -132,6 +161,13 @@ class GameScene: SKScene
                 },
                 SKAction.wait(forDuration: 2)
             ])))
+    }
+    
+    func didBegin( contact: SKPhysicsContact)
+    {
+        let collision:UInt32 = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
+        
+        //if collision == cat1 | cat2;
     }
     
     // Start the player moving up or down along its current position
