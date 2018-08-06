@@ -55,7 +55,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         self.addChild(player!)
         
         // We can also add emitters from particles the same way, but attach to the player as a child
-        let pulse = SKEmitterNode(fileNamed: "pulse")!
+        let pulse = SKEmitterNode(fileNamed: "pulse.sks")!
         player?.addChild(pulse)
         pulse.position = CGPoint(x: 0, y: 0)
         
@@ -135,14 +135,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         }
     }
     
-    func nextLevel( playerPhyicsBody:SKPhysicsBody)
+    func nextLevel(playerPhyicsBody:SKPhysicsBody)
     {
         let emitter = SKEmitterNode(fileNamed: "fireworks.sks")
+
         playerPhyicsBody.node?.addChild(emitter!)
-        
+
         self.run(SKAction.wait(forDuration: 0.5))
         {
-            emitter?.removeFromParent()
+            emitter!.removeFromParent()
             self.movePlayerToStart()
         }
     }
@@ -214,14 +215,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate
 //            return
 //        }
         
-        guard let nextTrack = tracksArray?[currentTrack + 1].position else { return }
+        let targetTrack = currentTrack == maxTrack ? currentTrack : currentTrack + 1
+        
+        guard let nextTrack = tracksArray?[targetTrack].position else { return }
     
         if let player = self.player
         {
             // Move To: The next track location, let spritekit do the actual move
             let moveAction = SKAction.move(to: CGPoint(x: nextTrack.x, y:player.position.y), duration: 0.2)
             
-            let up = directionArray[currentTrack+1]
+            let up = directionArray[targetTrack]
             
             
             player.run(moveAction, completion:
@@ -229,9 +232,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate
                 // Upon completion - set the moving to false (keeps it clean)
                 self.movingToTrack = false
                 
-                if self.currentTrack != 8
+                if targetTrack != 8
                 {
-                    self.player?.physicsBody?.velocity = up ? CGVector(dx: 0, dy: self.velocityArray[self.currentTrack+1]) : CGVector(dx: 0, dy: -self.velocityArray[self.currentTrack+1])
+                    self.player?.physicsBody?.velocity = up ? CGVector(dx: 0, dy: self.velocityArray[targetTrack]) : CGVector(dx: 0, dy: -self.velocityArray[targetTrack])
                 } else {
                     // Player on the last path, we want them to NOT be moving
                     self.player?.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
@@ -241,7 +244,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate
             currentTrack += 1
             
             // Play the sound at the scene level
-            self.run(moveSound)
+            //self.run(moveSound)
         }
         
     }
