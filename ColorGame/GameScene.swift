@@ -135,6 +135,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         }
     }
     
+    func nextLevel( playerPhyicsBody:SKPhysicsBody)
+    {
+        let emitter = SKEmitterNode(fileNamed: "fireworks.sks")
+        playerPhyicsBody.node?.addChild(emitter!)
+        
+        self.run(SKAction.wait(forDuration: 0.5))
+        {
+            emitter?.removeFromParent()
+            self.movePlayerToStart()
+        }
+    }
+    
     override func didMove(to view: SKView)
     {
         setupTracks()
@@ -179,17 +191,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         }
     }
     
+    func movePlayerToStart()
+    {
+        if let player = self.player
+        {
+            player.removeFromParent()
+            self.player = nil
+            self.currentTrack = 0
+            self.createPlayer()
+        }
+    }
+    
     func moveToNextTrack()
     {
         player?.removeAllActions()
         movingToTrack = true
         
-        // Don't allow player to go off the screen
-        if( currentTrack == maxTrack)
-        {
-            // TODO: Should play a different sound telling player they can't go any further
-            return
-        }
+//        // Don't allow player to go off the screen
+//        if( currentTrack == maxTrack)
+//        {
+//            // TODO: Should play a different sound telling player they can't go any further
+//            return
+//        }
         
         guard let nextTrack = tracksArray?[currentTrack + 1].position else { return }
     
@@ -197,10 +220,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         {
             // Move To: The next track location, let spritekit do the actual move
             let moveAction = SKAction.move(to: CGPoint(x: nextTrack.x, y:player.position.y), duration: 0.2)
+            
+            let up = directionArray[currentTrack+1]
+            
+            
             player.run(moveAction, completion:
             {
                 // Upon completion - set the moving to false (keeps it clean)
                 self.movingToTrack = false
+                
+                if self.currentTrack != 8
+                {
+                    self.player?.physicsBody?.velocity = up ? CGVector(dx: 0, dy: self.velocityArray[self.currentTrack+1]) : CGVector(dx: 0, dy: -self.velocityArray[self.currentTrack+1])
+                } else {
+                    // Player on the last path, we want them to NOT be moving
+                    self.player?.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
+                }
+                
             })
             currentTrack += 1
             
@@ -246,6 +282,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         player?.removeAllActions()
     }
     
+    // MARK: Contact delegate
     func didBegin( _ contact: SKPhysicsContact)
     {
         var playerBody:SKPhysicsBody
@@ -266,18 +303,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         
         if playerBody.categoryBitMask == playerCategory && otherBody.categoryBitMask == enemyCategory
         {
-            print("HIT ENEMY")
+            movePlayerToStart()
         }
         else if playerBody.categoryBitMask == playerCategory && otherBody.categoryBitMask == targetCategory
         {
-            print("target hit")
+            nextLevel(playerPhyicsBody: playerBody)
         }
     }
-
     
+    // MARK: Frame update loop
     
     override func update(_ currentTime: TimeInterval)
     {
-        // Called before each frame is rendered
+        // Might not have a player object yet...
+        if let player = self.player
+        {
+            if player.position.y > self.size.height || player.position.y < 0
+            {
+                movePlayerToStart()
+            }
+        }
     }
 }
