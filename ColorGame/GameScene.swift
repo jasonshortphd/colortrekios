@@ -17,9 +17,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate
     var currentTrack = 0
     var movingToTrack = false
     let maxTrack = 8
-    
+
+    // MARK: Sounds
     let moveSound = SKAction.playSoundFileNamed("move.wav", waitForCompletion: false)
-    
+    var backgroundAudio:SKAudioNode!
+
     // Choice of velocity per track chosen randomly at generation time
     let trackVelocities = [180, 200, 250]
     
@@ -156,6 +158,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         
         // Assign ourself to the contact delegate for the physicsWorld
         self.physicsWorld.contactDelegate = self
+        
+        if let musicURL = Bundle.main.url(forResource: "background", withExtension: "wav")
+        {
+            backgroundAudio = SKAudioNode(url: musicURL)
+            addChild(backgroundAudio)
+        }
 
         // Setup of the tracks
         if let numberOfTracks = tracksArray?.count
