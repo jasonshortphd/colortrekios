@@ -23,6 +23,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         didSet
         {
             self.scoreLabel?.text = "SCORE: \(self.currentScore)"
+            GameHandler.sharedInstance.score = currentScore
         }
     }
     var remainingTime:TimeInterval = 60
@@ -441,6 +442,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate
     
     func gameOver()
     {
+        // Save the high score for future use
+        GameHandler.sharedInstance.saveGameStats()
+        
         self.run(SKAction.playSoundFileNamed("levelCompleted.wav", waitForCompletion: false))
         
         let transition = SKTransition.fade(withDuration: 1.5)

@@ -14,6 +14,8 @@ class GameOverScene : SKScene
         lastScoreLabel = self.childNode(withName: "lastScoreLabel") as? SKLabelNode
         bestScoreLabel = self.childNode(withName: "bestScoreLabel") as? SKLabelNode
     
+        lastScoreLabel?.text = "\(GameHandler.sharedInstance.score)"
+        bestScoreLabel?.text = "\(GameHandler.sharedInstance.highScore)"
         
         playButton = self.childNode(withName: "startButton") as? SKSpriteNode
         
