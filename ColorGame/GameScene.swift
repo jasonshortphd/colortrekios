@@ -99,7 +99,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         player?.physicsBody?.categoryBitMask = playerCategory
         player?.physicsBody?.collisionBitMask = 0
         // Who do we want to be notified when we hit them?
-        player?.physicsBody?.contactTestBitMask = enemyCategory | targetCategory
+        player?.physicsBody?.contactTestBitMask = enemyCategory | targetCategory | powerUpCategory
         
     }
     
@@ -396,7 +396,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         {
             playerBody = contact.bodyB
             otherBody = contact.bodyA
-
         }
         
         if playerBody.categoryBitMask == playerCategory && otherBody.categoryBitMask == enemyCategory
@@ -407,6 +406,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         else if playerBody.categoryBitMask == playerCategory && otherBody.categoryBitMask == targetCategory
         {
             nextLevel(playerPhyicsBody: playerBody)
+        }
+        else if playerBody.categoryBitMask == playerCategory && otherBody.categoryBitMask == powerUpCategory
+        {
+            self.run(SKAction.playSoundFileNamed("powerUp.wav", waitForCompletion: false))
+            otherBody.node?.removeFromParent()
+            remainingTime += 5
         }
     }
     
