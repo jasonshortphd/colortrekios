@@ -1,11 +1,3 @@
-//
-//  AppDelegate.swift
-//  ColorGame
-//
-//  Created by Brian Advent on 21.07.17.
-//  Copyright © 2017 Brian Advent. All rights reserved.
-//
-
 import UIKit
 
 @UIApplicationMain

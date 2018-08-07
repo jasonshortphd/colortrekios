@@ -33,6 +33,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         }
     }
     
+    // Initialize the HUD
+    func createHUD()
+    {
+        timeLabel = self.childNode(withName: "time") as? SKLabelNode
+        scoreLabel = self.childNode(withName: "score") as? SKLabelNode
+        
+        timeLabel?.fontColor = UIColor.white
+
+        remainingTime = 60
+        currentScore = 0
+    }
+
+    
     var currentTrack = 0
     var movingToTrack = false
     let maxTrack = 8
@@ -158,6 +171,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate
     
     func nextLevel(playerPhyicsBody:SKPhysicsBody)
     {
+        currentScore += 1
         self.run(SKAction.playSoundFileNamed("levelUp.wav", waitForCompletion: false))
         let emitter = SKEmitterNode(fileNamed: "fireworks.sks")
 
@@ -170,11 +184,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         }
     }
     
+    func launchGameTimer ()
+    {
+        let timeAction = SKAction.repeatForever(SKAction.sequence([
+            SKAction.run({self.remainingTime -= 1}),
+            SKAction.wait(forDuration: 1)
+        ]))
+        
+        timeLabel?.run(timeAction)
+        
+    }
+    
     override func didMove(to view: SKView)
     {
         setupTracks()
+        createHUD()
         createPlayer()
         createTarget()
+        launchGameTimer()
         
         // Assign ourself to the contact delegate for the physicsWorld
         self.physicsWorld.contactDelegate = self
@@ -354,6 +381,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate
             {
                 movePlayerToStart()
             }
+        }
+        
+        if remainingTime <= 5
+        {
+            timeLabel?.fontColor = UIColor.red
         }
     }
 }
