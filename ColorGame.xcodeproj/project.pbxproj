@@ -24,7 +24,6 @@
 		52D3FD981F28CF1900BB2B7E /* move.wav in Resources */ = {isa = PBXBuildFile; fileRef = 525839A71F2282CA00C7D1B2 /* move.wav */; };
 		52D3FD991F28CF1900BB2B7E /* powerUp.wav in Resources */ = {isa = PBXBuildFile; fileRef = 525839AC1F2282CA00C7D1B2 /* powerUp.wav */; };
 		67902ADB2118EA0000BE1FB9 /* fireworks.sks in Resources */ = {isa = PBXBuildFile; fileRef = 67902AD92118EA0000BE1FB9 /* fireworks.sks */; };
-		67902ADC2118EA0000BE1FB9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 67902ADA2118EA0000BE1FB9 /* Assets.xcassets */; };
 		67902AE02119470000BE1FB9 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67902ADF2119470000BE1FB9 /* GameKit.framework */; };
 /* End PBXBuildFile section */
 
@@ -48,7 +47,6 @@
 		525839AD1F2282CA00C7D1B2 /* background.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = background.wav; sourceTree = "<group>"; };
 		52A17E0B1F2F82AB0089D6D4 /* pulse.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = pulse.sks; sourceTree = "<group>"; };
 		67902AD92118EA0000BE1FB9 /* fireworks.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = fireworks.sks; sourceTree = "<group>"; };
-		67902ADA2118EA0000BE1FB9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		67902ADF2119470000BE1FB9 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -117,7 +115,6 @@
 			children = (
 				52A17E0B1F2F82AB0089D6D4 /* pulse.sks */,
 				67902AD92118EA0000BE1FB9 /* fireworks.sks */,
-				67902ADA2118EA0000BE1FB9 /* Assets.xcassets */,
 			);
 			path = Particles;
 			sourceTree = "<group>";
@@ -201,7 +198,6 @@
 				52D3FD941F28CF1900BB2B7E /* fail.wav in Resources */,
 				52D3FD951F28CF1900BB2B7E /* levelCompleted.wav in Resources */,
 				52D3FD961F28CF1900BB2B7E /* levelUp.wav in Resources */,
-				67902ADC2118EA0000BE1FB9 /* Assets.xcassets in Resources */,
 				67902ADB2118EA0000BE1FB9 /* fireworks.sks in Resources */,
 				52D3FD971F28CF1900BB2B7E /* MenuHighscoreMusic.mp3 in Resources */,
 				52D3FD981F28CF1900BB2B7E /* move.wav in Resources */,
