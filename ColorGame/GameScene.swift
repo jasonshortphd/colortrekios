@@ -432,5 +432,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         {
             timeLabel?.fontColor = UIColor.red
         }
+        
+        if remainingTime <= 0
+        {
+            gameOver()
+        }
+    }
+    
+    func gameOver()
+    {
+        self.run(SKAction.playSoundFileNamed("levelCompleted.wav", waitForCompletion: false))
+        
+        let transition = SKTransition.fade(withDuration: 1.5)
+        
+        if let gameOverScene = SKScene(fileNamed: "GameOverScene")
+        {
+            gameOverScene.scaleMode = .aspectFit
+            self.view?.presentScene(gameOverScene, transition: transition)
+        }
+        
+        
     }
 }
