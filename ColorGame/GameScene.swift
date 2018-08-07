@@ -114,7 +114,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         target?.physicsBody?.collisionBitMask = 0
     }
     
-    func CreateEnemy( type:Enemies, forTrack track:Int) -> SKShapeNode?
+    func createEnemy( type:Enemies, forTrack track:Int) -> SKShapeNode?
     {
         let enemySprite = SKShapeNode()
         enemySprite.name = "ENEMY"
@@ -149,10 +149,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate
     
     func createPowerUp(forTrack track:Int)->SKSpriteNode?
     {
-        let powerUpSprite = SKSpriteNode(imageNamed: "PowerUp")
+        let powerUpSprite = SKSpriteNode(imageNamed: "powerUp")
         
         powerUpSprite.physicsBody = SKPhysicsBody(circleOfRadius: powerUpSprite.size.width/2)
         powerUpSprite.physicsBody?.linearDamping = 0
+        powerUpSprite.physicsBody?.collisionBitMask = 0 // No physics collisions
         powerUpSprite.physicsBody?.categoryBitMask = powerUpCategory
         // TODO: Fix this in the remove loop
         powerUpSprite.name = "ENEMY"
@@ -172,10 +173,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate
     
     func spawnEnemies()
     {
+        var randomTrackNumber = 0
+        let createPowerUp = GKRandomSource.sharedRandom().nextBool()
+        
+        if( createPowerUp )
+        {
+            randomTrackNumber = GKRandomSource.sharedRandom().nextInt(upperBound: 6)+1
+            if let powerUpObject = self.createPowerUp(forTrack: randomTrackNumber)
+            {
+                self.addChild(powerUpObject)
+            }
+        }
+        
         for i in 1 ... 7
         {
+            if i == randomTrackNumber
+            {
+                continue
+            }
+            
             let randomEnemyType = Enemies(rawValue: GKRandomSource.sharedRandom().nextInt(upperBound: 3))!
-            if let newEnemy = CreateEnemy(type: randomEnemyType, forTrack: i)
+            if let newEnemy = createEnemy(type: randomEnemyType, forTrack: i)
             {
                 // Attach them to the scene
                 self.addChild(newEnemy)
