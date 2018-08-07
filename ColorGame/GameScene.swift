@@ -15,6 +15,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate
     var target:SKSpriteNode?
     
     // MARK: HUD / UX
+    var pause:SKSpriteNode?
     var timeLabel:SKLabelNode?
     var scoreLabel:SKLabelNode?
     var currentScore:Int = 0
@@ -37,6 +38,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate
     // Initialize the HUD
     func createHUD()
     {
+        pause = self.childNode(withName: "pause") as? SKSpriteNode
         timeLabel = self.childNode(withName: "time") as? SKLabelNode
         scoreLabel = self.childNode(withName: "score") as? SKLabelNode
         
@@ -354,13 +356,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate
             
             if node?.name == "right" || node?.name == "rightImg"
             {
-               moveToNextTrack()
+                if currentTrack < maxTrack
+                {
+                    moveToNextTrack()
+                }
             } else if node?.name == "up" || node?.name == "upImg"
             {
                 moveVertically(up: true)
             } else if node?.name == "down" || node?.name == "downImg"
             {
                 moveVertically(up: false)
+            } else if node?.name == "pause", let scene = self.scene
+            {
+                if scene.isPaused
+                {
+                    scene.isPaused = false
+                }
+                else
+                {
+                    scene.isPaused = true
+                }
             }
         }
     }
