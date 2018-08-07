@@ -29,7 +29,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate
     {
         didSet
         {
-            
+            self.timeLabel?.text = "TIME: \(Int(self.remainingTime))"
         }
     }
     
@@ -243,7 +243,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate
 //            return
 //        }
         
-        let targetTrack = currentTrack == maxTrack ? currentTrack : currentTrack + 1
+        let targetTrack = currentTrack >= maxTrack ? currentTrack : currentTrack + 1
         
         guard let nextTrack = tracksArray?[targetTrack].position else { return }
     
