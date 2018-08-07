@@ -63,10 +63,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate
     // Assigned velocity per track
     var velocityArray = [Int]()
     
-    // Physics
+    // MARK: Physics bitmasks
     let playerCategory:UInt32 = 0x01 << 0
     let enemyCategory:UInt32 = 0x01 << 1
     let targetCategory:UInt32 = 0x01 << 2
+    let powerUpCategory:UInt32 = 0x01 << 3
     
     
     func setupTracks()
@@ -99,7 +100,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         player?.physicsBody?.collisionBitMask = 0
         // Who do we want to be notified when we hit them?
         player?.physicsBody?.contactTestBitMask = enemyCategory | targetCategory
-        
         
     }
     
@@ -147,6 +147,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         return enemySprite
     }
     
+    func createPowerUp(forTrack track:Int)->SKSpriteNode?
+    {
+        let powerUpSprite = SKSpriteNode(imageNamed: "PowerUp")
+        
+        powerUpSprite.physicsBody = SKPhysicsBody(circleOfRadius: powerUpSprite.size.width/2)
+        powerUpSprite.physicsBody?.linearDamping = 0
+        powerUpSprite.physicsBody?.categoryBitMask = powerUpCategory
+        // TODO: Fix this in the remove loop
+        powerUpSprite.name = "ENEMY"
+        let up = directionArray[track]
+        
+        guard let powerUpXPosition = tracksArray?[track].position.x else { return nil }
+        
+        powerUpSprite.position.x = powerUpXPosition
+        
+        powerUpSprite.position.y = up ? -130 : self.size.height + 130
+        
+        powerUpSprite.physicsBody?.velocity = up ? CGVector(dx: 0, dy: velocityArray[track]) :
+                                                    CGVector(dx: 0, dy: -velocityArray[track])
+        
+        return powerUpSprite
+    }
+    
     func spawnEnemies()
     {
         for i in 1 ... 7
@@ -192,7 +215,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate
         ]))
         
         timeLabel?.run(timeAction)
-        
     }
     
     override func didMove(to view: SKView)
