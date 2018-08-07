@@ -29,6 +29,7 @@
 		67902AE6211A4A0700BE1FB9 /* GameOverScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 67902AE2211A4A0600BE1FB9 /* GameOverScene.sks */; };
 		67902AE7211A4A0700BE1FB9 /* GameOverScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67902AE3211A4A0600BE1FB9 /* GameOverScene.swift */; };
 		67902AE8211A4A0700BE1FB9 /* StartScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 67902AE4211A4A0600BE1FB9 /* StartScene.sks */; };
+		67902AEA211A4D0800BE1FB9 /* ScrollingBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67902AE9211A4D0800BE1FB9 /* ScrollingBackground.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +57,7 @@
 		67902AE2211A4A0600BE1FB9 /* GameOverScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameOverScene.sks; sourceTree = "<group>"; };
 		67902AE3211A4A0600BE1FB9 /* GameOverScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameOverScene.swift; sourceTree = "<group>"; };
 		67902AE4211A4A0600BE1FB9 /* StartScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = StartScene.sks; sourceTree = "<group>"; };
+		67902AE9211A4D0800BE1FB9 /* ScrollingBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollingBackground.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +98,7 @@
 				67902AD82118E77F00BE1FB9 /* Particles */,
 				5258397F1F227F0000C7D1B2 /* GameScene.swift */,
 				67902AE3211A4A0600BE1FB9 /* GameOverScene.swift */,
+				67902AE9211A4D0800BE1FB9 /* ScrollingBackground.swift */,
 				67902AE1211A4A0600BE1FB9 /* StartScene.swift */,
 				525839831F227F0000C7D1B2 /* Main.storyboard */,
 				525839861F227F0000C7D1B2 /* Assets.xcassets */,
@@ -235,6 +238,7 @@
 				67902AE7211A4A0700BE1FB9 /* GameOverScene.swift in Sources */,
 				525839801F227F0000C7D1B2 /* GameScene.swift in Sources */,
 				525839821F227F0000C7D1B2 /* GameViewController.swift in Sources */,
+				67902AEA211A4D0800BE1FB9 /* ScrollingBackground.swift in Sources */,
 				5258397A1F227F0000C7D1B2 /* AppDelegate.swift in Sources */,
 				67902AE5211A4A0700BE1FB9 /* StartScene.swift in Sources */,
 			);
