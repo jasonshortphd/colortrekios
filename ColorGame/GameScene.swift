@@ -58,7 +58,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate
     var backgroundAudio:SKAudioNode!
 
     // Choice of velocity per track chosen randomly at generation time
-    let trackVelocities = [180, 200, 250]
+    let trackVelocities = [150, 190, 225]
     
     // Per track, are the enemies moving up or down?
     var directionArray = [Bool]()
@@ -262,6 +262,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate
             {
                 let randomNumberForVelocity = GKRandomSource.sharedRandom().nextInt(upperBound: 3)
                 velocityArray.append(trackVelocities[randomNumberForVelocity])
+                // TODO: Should never have three in a row of the same direction
                 directionArray.append( GKRandomSource.sharedRandom().nextBool())
             }
         }
