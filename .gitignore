@@ -1,5 +1,3 @@
-
-ColorGame.xcodeproj/xcuserdata/
-ColorGame.xcodeproj/project.xcworkspace/xcshareddata/
-ColorGame.xcodeproj/project.xcworkspace/xcuserdata/
-ColorGame.xcodeproj/project.xcworkspace/contents.xcworkspacedata
+*.xcworkspacedata
+SlideOver.xcodeproj/project.xcworkspace/*
+SlideOver.xcodeproj/xcuserdata/*
